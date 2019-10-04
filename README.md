@@ -15,6 +15,13 @@
 
 com.mybank.server.App
 
+### API URL Routings
+
+All the account related end points routine is done in the class as below path.
+com.mybank.account.AccountRouting
+
+## User API end points routing is done in class com.mybank.user.UserRouting
+
 ### Guice Module
 
 com.mybank.server.AppModule which is loading the main MyBankModule
