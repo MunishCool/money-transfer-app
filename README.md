@@ -26,10 +26,10 @@ mvn exec:java
 
 Application is running in inbuilt light weight javalin server on localhost port 7000. H2 is a in memory database which has been initialized with some sample user and account data to view
 
-- http://localhost:7000/user/test1
-- http://localhost:7000/user/test2
-- http://localhost:7000/account/1
-- http://localhost:7000/account/2
+- http://localhost:7000/api/user/test1
+- http://localhost:7000/api/user/test2
+- http://localhost:7000/api/account/1
+- http://localhost:7000/api/account/2
 
 ### Available Rest API's
 
