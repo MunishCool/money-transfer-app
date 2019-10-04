@@ -1,16 +1,10 @@
 # Money Transfer App rest api implemented in Javalin to showcase transfer of amount between two acounts
 
-### Technologies
-- Javalin API
-- H2 in memory database
-- Log4j
-- Apache HTTP Client
-- Google Guice for dependency injection
-
 ## Technology stack
 - Java 8
 - [Maven](https://maven.apache.org/)
-- [Google Guice](https://github.com/google/guice)
+- [Google Guice for dependency injection](https://github.com/google/guice)
+- [H2 in memory database](https://www.h2database.com/html/main.html)
 - [Maven](https://maven.apache.org/)
 - [Javalin](https://javalin.io/) (with embedded Jetty Server)
 - **Hand-written in-memory data storage using concurrency utilities**
