@@ -20,7 +20,7 @@ com.mybank.server.App
 All the account related end points routine is done in the class as below path.
 com.mybank.account.AccountRouting
 
-## User API end points routing is done in class com.mybank.user.UserRouting
+User API end points routing is done in class com.mybank.user.UserRouting
 
 ### Guice Module
 
