@@ -1,4 +1,4 @@
-# Money Transfer App rest api implemented in Javalin to showcase transfer of amount between two acounts
+# Rest API's for Money Transfer between two accounts, implemented in Javalin.
 
 ## Technology stack
 - Java 8
@@ -11,6 +11,13 @@
 - [JUnit 4](https://junit.org/junit4/)
 - [Apache HttpClient](https://hc.apache.org/index.html) (for unit testing)
 
+### Main Class
+
+com.mybank.server.App
+
+### Guice Module
+
+com.mybank.server.AppModule which is loading the main MyBankModule
 
 ### How to run
 ```sh
@@ -24,7 +31,7 @@ Application is running in inbuilt light weight javalin server on localhost port 
 - http://localhost:7000/account/1
 - http://localhost:7000/account/2
 
-### Available rest api's
+### Available Rest API's
 
 | HTTP METHOD | PATH | USAGE |
 | -----------| ------ | ------ |
@@ -43,10 +50,10 @@ Application is running in inbuilt light weight javalin server on localhost port 
 | POST | /api/transaction | perform transaction between 2 user accounts | 
 
 ### Http Status
-- 200 OK: The request has succeeded
-- 400 Bad Request: The request could not be understood by the server 
-- 404 Not Found: The requested resource cannot be found
-- 500 Internal Server Error: The server encountered an unexpected condition 
+- 200 OK: Request is ok and processed successfully.
+- 400 Bad Request: Unknown parameter in a request which server doesn't know or accept.
+- 404 Not Found: The requested resource is not found, or its not available in db.
+- 500 Internal Server Error: The server encountered an unexpected condition or exception.
 
 ### Dummy JSON for User and Account
 ##### User : 
@@ -61,8 +68,8 @@ Application is running in inbuilt light weight javalin server on localhost port 
 ```sh
 {  
    "customerName":"test1",
-   "balance":10.0000,
-   "currencyCode":"GBP"
+   "balance":1000.0000,
+   "currencyCode":"USD"
 } 
 ```
 
@@ -70,7 +77,7 @@ Application is running in inbuilt light weight javalin server on localhost port 
 
 ```sh
 {  
-  		"accountId": 1,
+  	"accountId": 1,
         "customerName": "munish",
         "customerEmail": "munish@test.com",
         "customerAddress": "India",
@@ -85,8 +92,8 @@ Application is running in inbuilt light weight javalin server on localhost port 
 #### User Transaction:
 ```sh
 {  
-   "currencyCode":"EUR",
-   "amount":100000.0000,
+   "currencyCode":"INR",
+   "amount":800000.0000,
    "fromAccountId":1,
    "toAccountId":2
 }
