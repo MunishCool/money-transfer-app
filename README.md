@@ -38,7 +38,7 @@ Application is running in inbuilt light weight javalin server on localhost port 
 - http://localhost:7000/api/account/1
 - http://localhost:7000/api/account/2
 
-### Available Rest API's
+### Available Rest API's for Users
 
 | HTTP METHOD | END POINT | USAGE |
 | -----------| ------ | ------ |
@@ -46,7 +46,12 @@ Application is running in inbuilt light weight javalin server on localhost port 
 | POST | /api/user/create | create a new user | 
 | PUT | /api/user/{userId} | update user | 
 | GET | /api/user/{userId} | get user details by userId | 
-| DELETE | /api/user/{userId} | remove user | 
+| DELETE | /api/user/{userId} | delete user | 
+
+### Available Rest API's for Accounts
+
+| HTTP METHOD | END POINT | USAGE |
+| -----------| ------ | ------ |
 | GET | /api/account/{accountId} | get account details by accountId | 
 | GET | /api/account/all | get all accounts | 
 | GET | /api/account/{accountId}/balance | get account balance details by accountId | 
@@ -55,7 +60,7 @@ Application is running in inbuilt light weight javalin server on localhost port 
 | PUT | /api/account/{accountId}/withdraw/{amount} | withdraw money from account | 
 | PUT | /api/account/changeStatus/{accountId}/{status} | disable/enable the account | 
 | PUT | /api/account/{accountId}/deposit/{amount} | deposit money to account | 
-| POST | /api/transaction | perform transaction between 2 user accounts | 
+| POST | /api/account/transaction | perform transaction between 2 user accounts | 
 
 ### Http Status
 - 200 OK: Request is ok and processed successfully.
