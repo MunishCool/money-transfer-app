@@ -26,6 +26,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mybank.db.connection.DAOFactory;
+import com.mybank.enums.AccountType;
 import com.mybank.model.Account;
 import com.mybank.server.App;
 
@@ -122,7 +123,8 @@ public class TestAccountService {
 	public void testCreateAccount() throws IOException, URISyntaxException {
 		URI uri = builder.setPath("/api/account/create").build();
 		BigDecimal balance = new BigDecimal(10).setScale(4, RoundingMode.HALF_EVEN);
-		Account acc = new Account(7, "test7", "test2@gmail.com", "China", "8900112288", "UID", "123", balance, "CNY");
+		Account acc = new Account(7, "test7", "test2@gmail.com", "China", "8900112288", "UID", "123", balance, "CNY",
+				AccountType.SAVING_ACCOUNT);
 		String jsonInString = mapper.writeValueAsString(acc);
 		StringEntity entity = new StringEntity(jsonInString);
 		HttpPost request = new HttpPost(uri);

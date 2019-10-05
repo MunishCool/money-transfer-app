@@ -3,11 +3,15 @@ package com.mybank.model;
 import java.math.BigDecimal;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mybank.enums.AccountType;
 
 public class Account {
 
 	@JsonProperty
 	private long accountId;
+
+	@JsonProperty(required = true)
+	private AccountType accountType;
 
 	@JsonProperty(required = true)
 	private String customerName;
@@ -37,7 +41,7 @@ public class Account {
 	}
 
 	public Account(String customerName, String customerEmail, String customerAddress, String customerMobile,
-			String customerIdProof,String customerPassword, BigDecimal balance, String currencyCode) {
+			String customerIdProof, String customerPassword, BigDecimal balance, String currencyCode) {
 		this.customerName = customerName;
 		this.customerEmail = customerEmail;
 		this.customerAddress = customerAddress;
@@ -49,7 +53,8 @@ public class Account {
 	}
 
 	public Account(long accountId, String customerName, String customerEmail, String customerAddress,
-			String customerMobile, String customerIdProof,String customerPassword, BigDecimal balance, String currencyCode) {
+			String customerMobile, String customerIdProof, String customerPassword, BigDecimal balance,
+			String currencyCode, AccountType accountType) {
 		this.accountId = accountId;
 		this.customerName = customerName;
 		this.customerEmail = customerEmail;
@@ -59,6 +64,7 @@ public class Account {
 		this.customerPassword = customerPassword;
 		this.balance = balance;
 		this.currencyCode = currencyCode;
+		this.accountType = accountType;
 	}
 
 	public String getcustomerEmail() {
@@ -92,8 +98,14 @@ public class Account {
 	public String getCurrencyCode() {
 		return currencyCode;
 	}
-	
-	
+
+	public AccountType getAccountType() {
+		return accountType;
+	}
+
+	public void setAccountType(AccountType accountType) {
+		this.accountType = accountType;
+	}
 
 	public String getCustomerMobile() {
 		return customerMobile;
@@ -110,7 +122,6 @@ public class Account {
 	public void setCustomerIdProof(String customerIdProof) {
 		this.customerIdProof = customerIdProof;
 	}
-	
 
 	public String getCustomerPassword() {
 		return customerPassword;
@@ -156,9 +167,10 @@ public class Account {
 
 	@Override
 	public String toString() {
-		return "Account{" + "accountId=" + accountId + ", customerName='" + customerName + '\'' + ", " + "balance="
-				+ balance + ", " + "customerEmail=" + customerEmail + "," + "customerMobile=" + customerMobile + ","
-				+ "customerIdProof=" + customerIdProof + "," + " " + "customerAddress=" + customerAddress + ", "
-				+ "currencyCode='" + currencyCode + '\'' + '}';
+		return "Account{" + "accountId=" + accountId + ", " + "accountType='" + accountType + '\'' + ", "
+				+ "customerName='" + customerName + '\'' + ", " + "balance=" + balance + ", " + "customerEmail="
+				+ customerEmail + "," + "customerMobile=" + customerMobile + "," + "customerIdProof=" + customerIdProof
+				+ "," + " " + "customerAddress=" + customerAddress + ", " + "currencyCode='" + currencyCode + '\''
+				+ '}';
 	}
 }

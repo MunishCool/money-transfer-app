@@ -20,6 +20,7 @@ import com.mybank.account.repositories.InMemoryAccountRepository;
 import com.mybank.custom.exception.AccountException;
 import com.mybank.db.connection.DAOFactory;
 import com.mybank.db.connection.H2DAOFactory;
+import com.mybank.enums.AccountType;
 import com.mybank.model.Account;
 import com.mybank.model.UserTransaction;
 
@@ -124,10 +125,11 @@ public class TestAccountBalance {
 			lockStmt = conn.prepareStatement(SQL_LOCK_ACC);
 			rs = lockStmt.executeQuery();
 			if (rs.next()) {
+				AccountType accountType = AccountType.valueOf(rs.getString("accountType"));
 				fromAccount = new Account(rs.getLong("accountId"), rs.getString("customerName"),
 						rs.getString("customerEmail"), rs.getString("customerAddress"), rs.getString("customerMobile"),
 						rs.getString("customerIdProof"), rs.getString("customerPassword"), rs.getBigDecimal("balance"),
-						rs.getString("currencyCode"));
+						rs.getString("currencyCode"),accountType);
 				if (log.isDebugEnabled())
 					log.debug("Locked Account: " + fromAccount);
 			}

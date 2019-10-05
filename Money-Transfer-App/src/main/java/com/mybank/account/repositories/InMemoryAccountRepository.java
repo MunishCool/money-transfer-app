@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 
 import com.mybank.custom.exception.AccountException;
 import com.mybank.db.connection.H2DAOFactory;
+import com.mybank.enums.AccountType;
 import com.mybank.model.Account;
 import com.mybank.model.MoneyUtil;
 import com.mybank.model.UserTransaction;
@@ -30,7 +31,7 @@ public class InMemoryAccountRepository implements AccountRepository {
 
 	private final static String SQL_GET_ACC_BY_ID = "SELECT * FROM Account WHERE accountId = ? ";
 	private final static String SQL_LOCK_ACC_BY_ID = "SELECT * FROM Account WHERE accountId = ? FOR UPDATE";
-	private final static String SQL_CREATE_ACC = "INSERT INTO Account (customerName,customerEmail,customerAddress,customerMobile,customerIdProof,customerPassword, balance, currencyCode) VALUES (?, ?, ?,?,?,?,?,?)";
+	private final static String SQL_CREATE_ACC = "INSERT INTO Account (customerName,customerEmail,customerAddress,customerMobile,customerIdProof,customerPassword, balance, currencyCode,accountType) VALUES (?,?, ?, ?,?,?,?,?,?)";
 	private final static String SQL_UPDATE_ACC_BALANCE = "UPDATE Account SET balance = ? WHERE AccountId = ? ";
 	private final static String SQL_GET_ALL_ACC = "SELECT * FROM Account";
 	private final static String SQL_DELETE_ACC_BY_ID = "DELETE FROM Account WHERE accountId = ?";
@@ -50,10 +51,11 @@ public class InMemoryAccountRepository implements AccountRepository {
 			stmt = conn.prepareStatement(SQL_GET_ALL_ACC);
 			rs = stmt.executeQuery();
 			while (rs.next()) {
+				AccountType accountType = AccountType.valueOf(rs.getString("accountType"));
 				Account acc = new Account(rs.getLong("accountId"), rs.getString("customerName"),
 						rs.getString("customerEmail"), rs.getString("customerAddress"), rs.getString("customerMobile"),
 						rs.getString("customerIdProof"), rs.getString("customerPassword"), rs.getBigDecimal("balance"),
-						rs.getString("currencyCode"));
+						rs.getString("currencyCode"), accountType);
 				if (log.isDebugEnabled())
 					log.debug("getAllAccounts(): Get  Account " + acc);
 				allAccounts.add(acc);
@@ -81,10 +83,11 @@ public class InMemoryAccountRepository implements AccountRepository {
 			stmt.setLong(1, accountId);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
+				AccountType accountType = AccountType.valueOf(rs.getString("accountType"));
 				acc = new Account(rs.getLong("accountId"), rs.getString("customerName"), rs.getString("customerEmail"),
 						rs.getString("customerAddress"), rs.getString("customerMobile"),
 						rs.getString("customerIdProof"), rs.getString("customerPassword"), rs.getBigDecimal("balance"),
-						rs.getString("currencyCode"));
+						rs.getString("currencyCode"), accountType);
 				if (log.isDebugEnabled())
 					log.debug("Retrieve Account By Id: " + acc);
 			}
@@ -115,6 +118,7 @@ public class InMemoryAccountRepository implements AccountRepository {
 			stmt.setString(6, Base64.getEncoder().encodeToString(account.getCustomerPassword().getBytes()));
 			stmt.setBigDecimal(7, account.getBalance());
 			stmt.setString(8, account.getCurrencyCode());
+			stmt.setString(9, account.getAccountType().name());
 			int affectedRows = stmt.executeUpdate();
 			if (affectedRows == 0) {
 				log.error("createAccount(): Creating account failed, no rows affected.");
@@ -174,10 +178,11 @@ public class InMemoryAccountRepository implements AccountRepository {
 			lockStmt.setLong(1, accountId);
 			rs = lockStmt.executeQuery();
 			if (rs.next()) {
+				AccountType accountType = AccountType.valueOf(rs.getString("accountType"));
 				targetAccount = new Account(rs.getLong("accountId"), rs.getString("customerName"),
 						rs.getString("customerEmail"), rs.getString("customerAddress"), rs.getString("customerMobile"),
 						rs.getString("customerIdProof"), rs.getString("customerPassword"), rs.getBigDecimal("balance"),
-						rs.getString("currencyCode"));
+						rs.getString("currencyCode"), accountType);
 				if (log.isDebugEnabled())
 					log.debug("updateAccountBalance from Account: " + targetAccount);
 			}
@@ -243,10 +248,11 @@ public class InMemoryAccountRepository implements AccountRepository {
 			lockStmt.setLong(1, userTransaction.getFromAccountId());
 			rs = lockStmt.executeQuery();
 			if (rs.next()) {
+				AccountType accountType = AccountType.valueOf(rs.getString("accountType"));
 				fromAccount = new Account(rs.getLong("accountId"), rs.getString("customerName"),
 						rs.getString("customerEmail"), rs.getString("customerAddress"), rs.getString("customerMobile"),
 						rs.getString("customerIdProof"), rs.getString("customerPassword"), rs.getBigDecimal("balance"),
-						rs.getString("currencyCode"));
+						rs.getString("currencyCode"), accountType);
 				if (log.isDebugEnabled())
 					log.debug("transferAccountBalance from Account: " + fromAccount);
 			}
@@ -254,10 +260,11 @@ public class InMemoryAccountRepository implements AccountRepository {
 			lockStmt.setLong(1, userTransaction.getToAccountId());
 			rs = lockStmt.executeQuery();
 			if (rs.next()) {
+				AccountType accountType = AccountType.valueOf(rs.getString("accountType"));
 				toAccount = new Account(rs.getLong("accountId"), rs.getString("customerName"),
 						rs.getString("customerEmail"), rs.getString("customerAddress"), rs.getString("customerMobile"),
 						rs.getString("customerIdProof"), rs.getString("customerPassword"), rs.getBigDecimal("balance"),
-						rs.getString("currencyCode"));
+						rs.getString("currencyCode"), accountType);
 				if (log.isDebugEnabled())
 					log.debug("transferAccountBalance to Account: " + toAccount);
 			}
@@ -334,10 +341,12 @@ public class InMemoryAccountRepository implements AccountRepository {
 			lockStmt.setLong(1, accountId);
 			rs = lockStmt.executeQuery();
 			if (rs.next()) {
+				AccountType accountType = AccountType.valueOf(rs.getString("accountType"));
+
 				targetAccount = new Account(rs.getLong("accountId"), rs.getString("customerName"),
 						rs.getString("customerEmail"), rs.getString("customerAddress"), rs.getString("customerMobile"),
 						rs.getString("customerIdProof"), rs.getString("customerPassword"), rs.getBigDecimal("balance"),
-						rs.getString("currencyCode"));
+						rs.getString("currencyCode"), accountType);
 				if (log.isDebugEnabled())
 					log.debug("updateAccount for Account: " + targetAccount);
 			}
