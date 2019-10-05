@@ -85,6 +85,7 @@ Application is running in inbuilt light weight javalin server on localhost port 
 ```sh
 {  
   	"accountId": 1,
+        "accountType": "PERSONAL",
         "customerName": "munish",
         "customerEmail": "munish@test.com",
         "customerAddress": "India",
