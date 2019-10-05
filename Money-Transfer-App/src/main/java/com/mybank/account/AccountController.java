@@ -62,4 +62,8 @@ class AccountController {
 		ctx.json(accountService.updateAccount(field, value, accountId));
 	}
 
+	public void disableAccount(Context ctx, Long accountId, boolean status) throws AccountException {
+		ctx.json(accountService.disableAccount(accountId, status));
+	}
+
 }

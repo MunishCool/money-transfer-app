@@ -37,6 +37,9 @@ public class Account {
 	@JsonProperty(required = true)
 	private String currencyCode;
 
+	@JsonProperty(required = true)
+	private boolean accountStatus;
+
 	public Account() {
 	}
 
@@ -54,7 +57,7 @@ public class Account {
 
 	public Account(long accountId, String customerName, String customerEmail, String customerAddress,
 			String customerMobile, String customerIdProof, String customerPassword, BigDecimal balance,
-			String currencyCode, AccountType accountType) {
+			String currencyCode, AccountType accountType, boolean accountStatus) {
 		this.accountId = accountId;
 		this.customerName = customerName;
 		this.customerEmail = customerEmail;
@@ -65,6 +68,7 @@ public class Account {
 		this.balance = balance;
 		this.currencyCode = currencyCode;
 		this.accountType = accountType;
+		this.accountStatus = accountStatus;
 	}
 
 	public String getcustomerEmail() {
@@ -129,6 +133,14 @@ public class Account {
 
 	public void setCustomerPassword(String customerPassword) {
 		this.customerPassword = customerPassword;
+	}
+
+	public boolean isAccountStatus() {
+		return accountStatus;
+	}
+
+	public void setAccountStatus(boolean accountStatus) {
+		this.accountStatus = accountStatus;
 	}
 
 	@Override

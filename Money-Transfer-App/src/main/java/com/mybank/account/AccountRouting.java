@@ -57,6 +57,10 @@ class AccountRouting extends Routing<AccountController> {
 				put(ctx -> getController().depositAmountToAccount(ctx, Long.valueOf(ctx.param("accountId")),
 						BigDecimal.valueOf(Double.valueOf(ctx.param("amount")))));
 			});
+			path("api/account/changeStatus/:accountId/:status", () -> {
+				put(ctx -> getController().disableAccount(ctx, Long.valueOf(ctx.param("accountId")),
+						Boolean.valueOf(ctx.param("status"))));
+			});
 			path("api/account/:accountId/withdraw/:amount", () -> {
 				put(ctx -> getController().withDramAmountFromAccount(ctx, Long.valueOf(ctx.param("accountId")),
 						BigDecimal.valueOf(Double.valueOf(ctx.param("amount")))));

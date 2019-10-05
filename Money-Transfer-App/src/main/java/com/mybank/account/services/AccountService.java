@@ -33,4 +33,6 @@ public interface AccountService {
 
 	public Account updateAccount(String field, String value, long accountId) throws AccountException;
 
+	public Account disableAccount(Long accountId, boolean status) throws AccountException;
+
 }

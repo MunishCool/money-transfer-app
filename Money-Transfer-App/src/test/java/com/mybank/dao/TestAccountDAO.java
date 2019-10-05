@@ -52,7 +52,7 @@ public class TestAccountDAO {
 	@Test
 	public void testCreateAccount() throws AccountException {
 		BigDecimal balance = new BigDecimal(10).setScale(4, RoundingMode.HALF_EVEN);
-		Account a = new Account(7, "test2", "test2@gmail.com", "China", "8900112288", "UID", "123", balance, "CNY",AccountType.PERSONAL);
+		Account a = new Account(7, "test2", "test2@gmail.com", "China", "8900112288", "UID", "123", balance, "CNY",AccountType.PERSONAL,true);
 		long aid = h2DaoFactory.getAccountDAO().createAccount(a);
 		Account afterCreation = h2DaoFactory.getAccountDAO().getAccountById(aid);
 		assertTrue(afterCreation.getcustomerName().equals("test2"));

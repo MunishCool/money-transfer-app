@@ -129,7 +129,7 @@ public class TestAccountBalance {
 				fromAccount = new Account(rs.getLong("accountId"), rs.getString("customerName"),
 						rs.getString("customerEmail"), rs.getString("customerAddress"), rs.getString("customerMobile"),
 						rs.getString("customerIdProof"), rs.getString("customerPassword"), rs.getBigDecimal("balance"),
-						rs.getString("currencyCode"),accountType);
+						rs.getString("currencyCode"), accountType, rs.getBoolean("accountStatus"));
 				if (log.isDebugEnabled())
 					log.debug("Locked Account: " + fromAccount);
 			}

@@ -31,8 +31,9 @@ public class InMemoryAccountRepository implements AccountRepository {
 
 	private final static String SQL_GET_ACC_BY_ID = "SELECT * FROM Account WHERE accountId = ? ";
 	private final static String SQL_LOCK_ACC_BY_ID = "SELECT * FROM Account WHERE accountId = ? FOR UPDATE";
-	private final static String SQL_CREATE_ACC = "INSERT INTO Account (customerName,customerEmail,customerAddress,customerMobile,customerIdProof,customerPassword, balance, currencyCode,accountType) VALUES (?,?, ?, ?,?,?,?,?,?)";
+	private final static String SQL_CREATE_ACC = "INSERT INTO Account (customerName,customerEmail,customerAddress,customerMobile,customerIdProof,customerPassword, balance, currencyCode,accountType,accountStatus) VALUES (?,?,?, ?, ?,?,?,?,?,?)";
 	private final static String SQL_UPDATE_ACC_BALANCE = "UPDATE Account SET balance = ? WHERE AccountId = ? ";
+	private final static String SQL_UPDATE_ACC_STATUS = "UPDATE Account SET accountStatus = ? WHERE AccountId = ? ";
 	private final static String SQL_GET_ALL_ACC = "SELECT * FROM Account";
 	private final static String SQL_DELETE_ACC_BY_ID = "DELETE FROM Account WHERE accountId = ?";
 
@@ -55,7 +56,7 @@ public class InMemoryAccountRepository implements AccountRepository {
 				Account acc = new Account(rs.getLong("accountId"), rs.getString("customerName"),
 						rs.getString("customerEmail"), rs.getString("customerAddress"), rs.getString("customerMobile"),
 						rs.getString("customerIdProof"), rs.getString("customerPassword"), rs.getBigDecimal("balance"),
-						rs.getString("currencyCode"), accountType);
+						rs.getString("currencyCode"), accountType, rs.getBoolean("accountStatus"));
 				if (log.isDebugEnabled())
 					log.debug("getAllAccounts(): Get  Account " + acc);
 				allAccounts.add(acc);
@@ -87,7 +88,7 @@ public class InMemoryAccountRepository implements AccountRepository {
 				acc = new Account(rs.getLong("accountId"), rs.getString("customerName"), rs.getString("customerEmail"),
 						rs.getString("customerAddress"), rs.getString("customerMobile"),
 						rs.getString("customerIdProof"), rs.getString("customerPassword"), rs.getBigDecimal("balance"),
-						rs.getString("currencyCode"), accountType);
+						rs.getString("currencyCode"), accountType, rs.getBoolean("accountStatus"));
 				if (log.isDebugEnabled())
 					log.debug("Retrieve Account By Id: " + acc);
 			}
@@ -119,6 +120,7 @@ public class InMemoryAccountRepository implements AccountRepository {
 			stmt.setBigDecimal(7, account.getBalance());
 			stmt.setString(8, account.getCurrencyCode());
 			stmt.setString(9, account.getAccountType().name());
+			stmt.setBoolean(10, true);
 			int affectedRows = stmt.executeUpdate();
 			if (affectedRows == 0) {
 				log.error("createAccount(): Creating account failed, no rows affected.");
@@ -182,7 +184,7 @@ public class InMemoryAccountRepository implements AccountRepository {
 				targetAccount = new Account(rs.getLong("accountId"), rs.getString("customerName"),
 						rs.getString("customerEmail"), rs.getString("customerAddress"), rs.getString("customerMobile"),
 						rs.getString("customerIdProof"), rs.getString("customerPassword"), rs.getBigDecimal("balance"),
-						rs.getString("currencyCode"), accountType);
+						rs.getString("currencyCode"), accountType, rs.getBoolean("accountStatus"));
 				if (log.isDebugEnabled())
 					log.debug("updateAccountBalance from Account: " + targetAccount);
 			}
@@ -252,7 +254,7 @@ public class InMemoryAccountRepository implements AccountRepository {
 				fromAccount = new Account(rs.getLong("accountId"), rs.getString("customerName"),
 						rs.getString("customerEmail"), rs.getString("customerAddress"), rs.getString("customerMobile"),
 						rs.getString("customerIdProof"), rs.getString("customerPassword"), rs.getBigDecimal("balance"),
-						rs.getString("currencyCode"), accountType);
+						rs.getString("currencyCode"), accountType, rs.getBoolean("accountStatus"));
 				if (log.isDebugEnabled())
 					log.debug("transferAccountBalance from Account: " + fromAccount);
 			}
@@ -264,7 +266,7 @@ public class InMemoryAccountRepository implements AccountRepository {
 				toAccount = new Account(rs.getLong("accountId"), rs.getString("customerName"),
 						rs.getString("customerEmail"), rs.getString("customerAddress"), rs.getString("customerMobile"),
 						rs.getString("customerIdProof"), rs.getString("customerPassword"), rs.getBigDecimal("balance"),
-						rs.getString("currencyCode"), accountType);
+						rs.getString("currencyCode"), accountType, rs.getBoolean("accountStatus"));
 				if (log.isDebugEnabled())
 					log.debug("transferAccountBalance to Account: " + toAccount);
 			}
@@ -346,7 +348,7 @@ public class InMemoryAccountRepository implements AccountRepository {
 				targetAccount = new Account(rs.getLong("accountId"), rs.getString("customerName"),
 						rs.getString("customerEmail"), rs.getString("customerAddress"), rs.getString("customerMobile"),
 						rs.getString("customerIdProof"), rs.getString("customerPassword"), rs.getBigDecimal("balance"),
-						rs.getString("currencyCode"), accountType);
+						rs.getString("currencyCode"), accountType, rs.getBoolean("accountStatus"));
 				if (log.isDebugEnabled())
 					log.debug("updateAccount for Account: " + targetAccount);
 			}
@@ -391,5 +393,62 @@ public class InMemoryAccountRepository implements AccountRepository {
 			DbUtils.closeQuietly(updateStmt);
 		}
 		return updateCount;
+	}
+
+	@Override
+	public int disableAccount(Long accountId, boolean status) throws AccountException {
+		Connection conn = null;
+		PreparedStatement lockStmt = null;
+		PreparedStatement updateStmt = null;
+		ResultSet rs = null;
+		Account targetAccount = null;
+		int updateCount = -1;
+		try {
+			conn = H2DAOFactory.getConnection();
+			conn.setAutoCommit(false);
+			// lock account for writing:
+			lockStmt = conn.prepareStatement(SQL_LOCK_ACC_BY_ID);
+			lockStmt.setLong(1, accountId);
+			rs = lockStmt.executeQuery();
+			if (rs.next()) {
+				AccountType accountType = AccountType.valueOf(rs.getString("accountType"));
+				targetAccount = new Account(rs.getLong("accountId"), rs.getString("customerName"),
+						rs.getString("customerEmail"), rs.getString("customerAddress"), rs.getString("customerMobile"),
+						rs.getString("customerIdProof"), rs.getString("customerPassword"), rs.getBigDecimal("balance"),
+						rs.getString("currencyCode"), accountType, rs.getBoolean("accountStatus"));
+				if (log.isDebugEnabled())
+					log.debug("disableAccount {} : " + targetAccount);
+			}
+
+			if (targetAccount == null) {
+				throw new AccountException("disableAccount(): fail to lock account : " + accountId);
+			}
+			// update account status on success locking
+
+			updateStmt = conn.prepareStatement(SQL_UPDATE_ACC_STATUS);
+			updateStmt.setBoolean(1, status);
+			updateStmt.setLong(2, accountId);
+			updateCount = updateStmt.executeUpdate();
+			conn.commit();
+			if (log.isDebugEnabled())
+				log.debug("account details after disabling: " + targetAccount);
+			return updateCount;
+		} catch (SQLException se) {
+			// rollback transaction if exception occurs
+			log.error("updateAccountBalance(): User Transaction Failed, rollback initiated for: " + accountId, se);
+			try {
+				if (conn != null)
+					conn.rollback();
+			} catch (SQLException re) {
+				throw new AccountException("Fail to rollback transaction", re);
+			}
+		} finally {
+			DbUtils.closeQuietly(conn);
+			DbUtils.closeQuietly(rs);
+			DbUtils.closeQuietly(lockStmt);
+			DbUtils.closeQuietly(updateStmt);
+		}
+		return updateCount;
+
 	}
 }

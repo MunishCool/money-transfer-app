@@ -124,7 +124,7 @@ public class TestAccountService {
 		URI uri = builder.setPath("/api/account/create").build();
 		BigDecimal balance = new BigDecimal(10).setScale(4, RoundingMode.HALF_EVEN);
 		Account acc = new Account(7, "test7", "test2@gmail.com", "China", "8900112288", "UID", "123", balance, "CNY",
-				AccountType.SAVING_ACCOUNT);
+				AccountType.SAVING_ACCOUNT,true);
 		String jsonInString = mapper.writeValueAsString(acc);
 		StringEntity entity = new StringEntity(jsonInString);
 		HttpPost request = new HttpPost(uri);

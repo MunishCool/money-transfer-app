@@ -25,14 +25,15 @@ customerPassword VARCHAR(30),
 balance DECIMAL(19,4),
 currencyCode VARCHAR(30),
 accountType VARCHAR(30),
+accountStatus boolean(1)
 );
 
 CREATE UNIQUE INDEX idx_acc on Account(customerName,currencyCode);
 
-INSERT INTO Account (customerName,customerEmail,customerAddress,customerMobile,customerIdProof,balance,currencyCode,accountType) VALUES ('munish','munish@test.com','India','+918901901200','ZVXYZA',100.0000,'USD','PERSONAL');
-INSERT INTO Account (customerName,customerEmail,customerAddress,customerMobile,customerIdProof,balance,currencyCode,accountType) VALUES ('test1','test1@test.com','America','+401901901200','XVOYPA',200.0000,'USD','SAVING_ACCOUNT');
-INSERT INTO Account (customerName,customerEmail,customerAddress,customerMobile,customerIdProof,balance,currencyCode,accountType) VALUES ('test2','test2@test.com','Europe','+628601901200','CVXYZA',500.0000,'EUR','PERSONAL');
-INSERT INTO Account (customerName,customerEmail,customerAddress,customerMobile,customerIdProof,balance,currencyCode,accountType) VALUES ('test3','test3@test.com','Europe','+128901911200','DVXEZN',500.0000,'EUR','CURRENT_ACCOUNT');
-INSERT INTO Account (customerName,customerEmail,customerAddress,customerMobile,customerIdProof,balance,currencyCode,accountType) VALUES ('test4','test4@test.com','Germany','+448901901200','EVCYZM',500.0000,'GBP','CURRENT_ACCOUNT');
-INSERT INTO Account (customerName,customerEmail,customerAddress,customerMobile,customerIdProof,balance,currencyCode,accountType) VALUES ('test5','test5@test.com','Germany','+448901901200','FVDYZX',500.0000,'GBP','PERSONAL');
+INSERT INTO Account (customerName,customerEmail,customerAddress,customerMobile,customerIdProof,balance,currencyCode,accountType,accountStatus) VALUES ('munish','munish@test.com','India','+918901901200','ZVXYZA',100.0000,'USD','PERSONAL',true);
+INSERT INTO Account (customerName,customerEmail,customerAddress,customerMobile,customerIdProof,balance,currencyCode,accountType,accountStatus) VALUES ('test1','test1@test.com','America','+401901901200','XVOYPA',200.0000,'USD','SAVING_ACCOUNT',true);
+INSERT INTO Account (customerName,customerEmail,customerAddress,customerMobile,customerIdProof,balance,currencyCode,accountType,accountStatus) VALUES ('test2','test2@test.com','Europe','+628601901200','CVXYZA',500.0000,'EUR','PERSONAL',true);
+INSERT INTO Account (customerName,customerEmail,customerAddress,customerMobile,customerIdProof,balance,currencyCode,accountType,accountStatus) VALUES ('test3','test3@test.com','Europe','+128901911200','DVXEZN',500.0000,'EUR','CURRENT_ACCOUNT',true);
+INSERT INTO Account (customerName,customerEmail,customerAddress,customerMobile,customerIdProof,balance,currencyCode,accountType,accountStatus) VALUES ('test4','test4@test.com','Germany','+448901901200','EVCYZM',500.0000,'GBP','CURRENT_ACCOUNT',true);
+INSERT INTO Account (customerName,customerEmail,customerAddress,customerMobile,customerIdProof,balance,currencyCode,accountType,accountStatus) VALUES ('test5','test5@test.com','Germany','+448901901200','FVDYZX',500.0000,'GBP','PERSONAL',true);
 

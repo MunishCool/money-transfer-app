@@ -28,4 +28,6 @@ public interface AccountRepository {
 
 	long updateAccount(String field, String value, long accountId) throws AccountException;
 
+	int disableAccount(Long accountId, boolean status) throws AccountException;
+
 }

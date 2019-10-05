@@ -208,4 +208,10 @@ class DefaultAccountService implements AccountService {
 		accountRepository.updateAccount(field, value, accountId);
 		return accountRepository.getAccountById(accountId);
 	}
+
+	@Override
+	public Account disableAccount(Long accountId, boolean status) throws AccountException {
+		accountRepository.disableAccount(accountId, status);
+		return accountRepository.getAccountById(accountId);
+	}
 }
