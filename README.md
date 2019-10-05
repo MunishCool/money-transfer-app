@@ -40,7 +40,7 @@ Application is running in inbuilt light weight javalin server on localhost port 
 
 ### Available Rest API's
 
-| HTTP METHOD | PATH | USAGE |
+| HTTP METHOD | END POINT | USAGE |
 | -----------| ------ | ------ |
 | GET | /api/user/all | get all users | 
 | POST | /api/user/create | create a new user | 
@@ -53,6 +53,7 @@ Application is running in inbuilt light weight javalin server on localhost port 
 | POST | /api/account/create | create a new account
 | DELETE | /api/account/{accountId} | remove account by accountId | 
 | PUT | /api/account/{accountId}/withdraw/{amount} | withdraw money from account | 
+| PUT | /api/account/changeStatus/{accountId}/{status} | disable/enable the account | 
 | PUT | /api/account/{accountId}/deposit/{amount} | deposit money to account | 
 | POST | /api/transaction | perform transaction between 2 user accounts | 
 
@@ -93,7 +94,8 @@ Application is running in inbuilt light weight javalin server on localhost port 
         "customerIdProof": "ZVXYZA",
         "customerPassword": XVZA
         "balance": 100.0000,
-        "currencyCode": "USD"
+        "currencyCode": "USD",
+        "accountStatus": true
 } 
 ```
 
